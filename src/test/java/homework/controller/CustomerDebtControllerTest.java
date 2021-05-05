@@ -1,7 +1,5 @@
 package homework.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
 import homework.exception.CustomerDebtNotFoundException;
 import homework.exception.InvalidCustomerDebtException;
 import homework.exception.InvalidInputException;
@@ -17,7 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static homework.util.InputValidatorTest.createCustomerDebt;
+import static homework.TestHelper.asJsonString;
+import static homework.TestHelper.createCustomerDebt;
 import static java.util.Collections.singletonList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -142,13 +141,4 @@ public class CustomerDebtControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    private String asJsonString(CustomerDebt debt) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JodaModule());
-            return mapper.writeValueAsString(debt);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

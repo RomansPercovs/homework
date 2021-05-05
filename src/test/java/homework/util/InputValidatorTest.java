@@ -6,7 +6,6 @@ import homework.exception.InvalidInputException;
 import homework.model.Customer;
 import homework.model.CustomerDebt;
 import homework.repositories.CustomerRepository;
-import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,7 +16,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
-import static org.joda.time.DateTime.now;
+import static homework.TestHelper.createCustomerDebt;
+import static homework.TestHelper.createCustomerDebtWithWrongAmount;
+import static homework.TestHelper.createCustomerDebtWithWrongDate;
+import static homework.TestHelper.createCustomerWithInvalidEmail;
+import static homework.TestHelper.createInvalidCustomer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,20 +44,18 @@ public class InputValidatorTest {
     }
 
     @Test
-    public void validateCustomer_withEmptyName_shouldThrowInvalidCustomerException() {
+    public void validateInvalidCustomer_shouldThrowInvalidCustomerException() {
         exception.expect(InvalidCustomerException.class);
         exception.expectMessage("Invalid customer data");
-        Customer customer = createCustomer();
-        customer.setName("");
+        Customer customer = createInvalidCustomer();
         validator.validateCustomer(customer);
     }
 
     @Test
-    public void validateCustomer_withWrongEmail_shouldThrowInvalidCustomerException() {
+    public void validateInvalidCustomer_withWrongEmail_shouldThrowInvalidCustomerException() {
         exception.expect(InvalidCustomerException.class);
         exception.expectMessage("Invalid customer data");
-        Customer customer = createCustomer();
-        customer.setEmail("wrong.email");
+        Customer customer = createCustomerWithInvalidEmail();
         validator.validateCustomer(customer);
     }
 
@@ -62,8 +63,7 @@ public class InputValidatorTest {
     public void validateCustomerDebt_withWrongAmount_shouldThrowInvalidCustomerDebtException() {
         exception.expect(InvalidCustomerDebtException.class);
         exception.expectMessage("Invalid debt");
-        CustomerDebt debt = createCustomerDebt();
-        debt.setAmount(-2.00);
+        CustomerDebt debt = createCustomerDebtWithWrongAmount();
         validator.validateCustomerDebt(debt);
     }
 
@@ -71,8 +71,7 @@ public class InputValidatorTest {
     public void validateCustomerDebt_withInvalidDate_shouldThrowInvalidCustomerDebtException() {
         exception.expect(InvalidCustomerDebtException.class);
         exception.expectMessage("Invalid debt");
-        CustomerDebt debt = createCustomerDebt();
-        debt.setDueDate(new DateTime(now()).minusDays(20));
+        CustomerDebt debt = createCustomerDebtWithWrongDate();
         validator.validateCustomerDebt(debt);
     }
 
@@ -86,25 +85,6 @@ public class InputValidatorTest {
         verify(customerRepository).findById(1L);
     }
 
-    public static Customer createCustomer() {
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setName("John");
-        customer.setSurname("Doe");
-        customer.setCountry("LV");
-        customer.setPassword("password");
-        customer.setEmail("test@test.lv");
-        return customer;
-    }
 
-    public static CustomerDebt createCustomerDebt() {
-        CustomerDebt debt = new CustomerDebt();
-        debt.setId(1L);
-        debt.setAmount(500.00);
-        debt.setCurrency("EUR");
-        debt.setDueDate(new DateTime(now()).plusYears(1));
-        debt.setCustomer(createCustomer());
-        return debt;
-    }
 
 }

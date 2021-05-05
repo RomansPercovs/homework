@@ -1,6 +1,5 @@
 package homework.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import homework.exception.CustomerNotFoundException;
 import homework.exception.InvalidCustomerException;
 import homework.exception.InvalidInputException;
@@ -16,7 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static homework.util.InputValidatorTest.createCustomer;
+import static homework.TestHelper.asJsonString;
+import static homework.TestHelper.createCustomer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -146,13 +146,5 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customer)))
                 .andExpect(status().isNotFound());
-    }
-
-    private String asJsonString(Customer customer) {
-        try {
-            return new ObjectMapper().writeValueAsString(customer);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -1,11 +1,8 @@
 package homework.service;
 
 import homework.exception.CustomerDebtNotFoundException;
-import homework.exception.CustomerNotFoundException;
 import homework.repositories.CustomerDebtRepository;
-import homework.repositories.CustomerRepository;
 import homework.service.impl.CustomerDebtServiceImpl;
-import homework.service.impl.CustomerServiceImpl;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
-import static homework.util.InputValidatorTest.createCustomerDebt;
+import static homework.TestHelper.createCustomerDebt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
