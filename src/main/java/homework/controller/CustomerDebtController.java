@@ -4,6 +4,8 @@ import homework.exception.CustomerDebtNotFoundException;
 import homework.exception.InvalidCustomerDebtException;
 import homework.exception.InvalidInputException;
 import homework.model.CustomerDebt;
+import homework.service.CustomerDebtService;
+import homework.util.InputValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import homework.service.CustomerDebtService;
-import homework.util.InputValidator;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("debt")
+@RequestMapping("/debt")
 public class CustomerDebtController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class CustomerDebtController {
     private static final Logger logger = LoggerFactory.getLogger(CustomerDebtController.class);
 
 
-    @GetMapping("/{customerId}}")
+    @GetMapping("/{customerId}")
     public ResponseEntity<List<CustomerDebt>> getCustomerDebt(@PathVariable Long customerId) {
         ResponseEntity<List<CustomerDebt>> response;
         try {
@@ -54,7 +54,7 @@ public class CustomerDebtController {
         try {
             validator.validateCustomerDebt(customerDebt);
             customerDebtService.createCustomerDebt(customerDebt);
-            response = new ResponseEntity<>(HttpStatus.OK);
+            response = new ResponseEntity<>(HttpStatus.CREATED);
         } catch (InvalidCustomerDebtException e) {
             logger.error(e.getMessage());
             response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -68,7 +68,7 @@ public class CustomerDebtController {
         try {
             validator.validateId(id);
             customerDebtService.deleteCustomerDebt(id);
-            response = new ResponseEntity<>(HttpStatus.OK);
+            response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (InvalidInputException e) {
             logger.error(e.getMessage());
             response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -1,9 +1,11 @@
 package homework.controller;
 
-import homework.exception.InvalidInputException;
-import homework.exception.InvalidCustomerException;
 import homework.exception.CustomerNotFoundException;
+import homework.exception.InvalidCustomerException;
+import homework.exception.InvalidInputException;
 import homework.model.Customer;
+import homework.service.CustomerService;
+import homework.util.InputValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import homework.service.CustomerService;
-import homework.util.InputValidator;
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping("/customer")
 public class CustomerController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class CustomerController {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
-    @GetMapping("/{id}}")
+    @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomer(@PathVariable Long id) {
         ResponseEntity<Customer> response;
         try {
@@ -48,7 +48,7 @@ public class CustomerController {
         return response;
     };
 
-    @PostMapping("/new")
+    @PostMapping(value = "/new")
     public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
         ResponseEntity<String> response;
         try {
